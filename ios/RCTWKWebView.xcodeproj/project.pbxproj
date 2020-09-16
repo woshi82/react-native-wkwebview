@@ -12,6 +12,8 @@
 		097457AF1D2AF4E0000D9368 /* RCTWKWebView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 097457AC1D2A4595000D9368 /* RCTWKWebView.h */; };
 		097457B01D2AF4E0000D9368 /* RCTWKWebViewManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 097457A81D2A457C000D9368 /* RCTWKWebViewManager.h */; };
 		3E609CF61EAA815D00187C8C /* WeakScriptMessageDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E609CF51EAA815D00187C8C /* WeakScriptMessageDelegate.m */; };
+		853D9DE82512353F002B39F4 /* NSURLProtocol+WebKitSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 853D9DE72512353F002B39F4 /* NSURLProtocol+WebKitSupport.m */; };
+		853D9DEB251238C3002B39F4 /* HybridNSURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 853D9DEA251238C3002B39F4 /* HybridNSURLProtocol.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +38,10 @@
 		097457AD1D2A4595000D9368 /* RCTWKWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = RCTWKWebView.m; sourceTree = "<group>"; tabWidth = 2; };
 		3E609CF41EAA815D00187C8C /* WeakScriptMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeakScriptMessageDelegate.h; sourceTree = "<group>"; };
 		3E609CF51EAA815D00187C8C /* WeakScriptMessageDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeakScriptMessageDelegate.m; sourceTree = "<group>"; };
+		853D9DE62512353F002B39F4 /* NSURLProtocol+WebKitSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLProtocol+WebKitSupport.h"; sourceTree = "<group>"; };
+		853D9DE72512353F002B39F4 /* NSURLProtocol+WebKitSupport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURLProtocol+WebKitSupport.m"; sourceTree = "<group>"; };
+		853D9DEA251238C3002B39F4 /* HybridNSURLProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HybridNSURLProtocol.m; sourceTree = "<group>"; };
+		853D9DEC25123953002B39F4 /* HybridNSURLProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HybridNSURLProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,11 +75,15 @@
 			isa = PBXGroup;
 			children = (
 				097457AC1D2A4595000D9368 /* RCTWKWebView.h */,
+				853D9DEA251238C3002B39F4 /* HybridNSURLProtocol.m */,
+				853D9DEC25123953002B39F4 /* HybridNSURLProtocol.h */,
 				097457AD1D2A4595000D9368 /* RCTWKWebView.m */,
 				097457A81D2A457C000D9368 /* RCTWKWebViewManager.h */,
 				097457A91D2A457C000D9368 /* RCTWKWebViewManager.m */,
 				3E609CF41EAA815D00187C8C /* WeakScriptMessageDelegate.h */,
 				3E609CF51EAA815D00187C8C /* WeakScriptMessageDelegate.m */,
+				853D9DE62512353F002B39F4 /* NSURLProtocol+WebKitSupport.h */,
+				853D9DE72512353F002B39F4 /* NSURLProtocol+WebKitSupport.m */,
 			);
 			path = RCTWKWebView;
 			sourceTree = "<group>";
@@ -116,6 +126,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 097457911D2A440A000D9368;
@@ -133,6 +144,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853D9DEB251238C3002B39F4 /* HybridNSURLProtocol.m in Sources */,
+				853D9DE82512353F002B39F4 /* NSURLProtocol+WebKitSupport.m in Sources */,
 				097457AB1D2A457C000D9368 /* RCTWKWebViewManager.m in Sources */,
 				3E609CF61EAA815D00187C8C /* WeakScriptMessageDelegate.m in Sources */,
 				097457AE1D2A4595000D9368 /* RCTWKWebView.m in Sources */,
