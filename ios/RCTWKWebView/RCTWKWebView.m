@@ -14,8 +14,8 @@
 
 #import <objc/runtime.h>
 
-// runtime trick to remove WKWebView keyboard default toolbar
-// see: http://stackoverflow.com/questions/19033292/ios-7-uiwebview-keyboard-issue/19042279#19042279
+NSString *const RCTJSNavigationScheme = @"react-js-navigation";
+
 @interface _SwizzleHelperWK : NSObject @end
 @implementation _SwizzleHelperWK
 -(id)inputAccessoryView
@@ -211,6 +211,47 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   [_webView stopLoading];
 }
 
+- (NSURL *)fileURLForBuggyWKWebView8:(NSURL *)fileURL {
+    NSError *error = nil;
+    if (!fileURL.fileURL || ![fileURL checkResourceIsReachableAndReturnError:&error]) {
+        return nil;
+    }
+    
+    // Create "/temp/www" directory
+    NSFileManager *fileManager= [NSFileManager defaultManager];
+    NSURL *temDirURL = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:@"www"];
+    BOOL temDirURLisDir;
+    if(!([fileManager fileExistsAtPath: temDirURL.path isDirectory:&temDirURLisDir] && temDirURLisDir)) {
+        [fileManager createDirectoryAtURL:temDirURL withIntermediateDirectories:YES attributes:nil error:&error];
+    }
+    
+    
+    NSURL *dirURL = [NSURL URLWithString:[fileURL.path stringByDeletingLastPathComponent]];
+    NSURL *dstDirURL = [temDirURL URLByAppendingPathComponent:dirURL.lastPathComponent];
+    NSURL *dstURL = [dstDirURL URLByAppendingPathComponent:fileURL.lastPathComponent];
+    
+    
+    if([fileManager fileExistsAtPath: dstDirURL.path]) {
+        [fileManager removeItemAtURL:dstDirURL error:&error];
+    }
+    [fileManager copyItemAtPath:dirURL.path toPath:dstDirURL.path error:&error];
+    // ret7 ? NSLog(@"拷贝成功"):NSLog(@"拷贝失败");
+    
+
+    
+    
+    
+//    if([fileManager fileExistsAtPath: dstURL.path]) {
+//        [fileManager removeItemAtURL:dstURL error:&error];
+//    }
+//
+//    [fileManager copyItemAtURL:fileURL toURL:dstURL error:&error];
+    // Files in "/temp/www" load flawlesly :)
+    
+    return dstURL;
+}
+
+
 - (void)setSource:(NSDictionary *)source
 {
   if (![_source isEqualToDictionary:source]) {
@@ -226,11 +267,32 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     NSString *file = [RCTConvert NSString:source[@"file"]];
     NSString *allowingReadAccessToURL = [RCTConvert NSString:source[@"allowingReadAccessToURL"]];
     
-    if (file && [_webView respondsToSelector:@selector(loadFileURL:allowingReadAccessToURL:)]) {
-      NSURL *fileURL = [RCTConvert NSURL:file];
-      NSURL *baseURL = [RCTConvert NSURL:allowingReadAccessToURL];
-      [_webView loadFileURL:fileURL allowingReadAccessToURL:baseURL];
-      return;
+    if (file) {
+        NSURL *fileURL = [RCTConvert NSURL:file];
+        if([_webView respondsToSelector:@selector(loadFileURL:allowingReadAccessToURL:)]) {
+            
+            NSURL *baseURL = [RCTConvert NSURL:allowingReadAccessToURL];
+            [_webView loadFileURL:fileURL allowingReadAccessToURL:baseURL];
+            return;
+        } else {
+            NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+            // NSLog(@"system type:: %@, if:%d", [[UIDevice currentDevice] systemVersion], [systemVersion isEqualToString:@"8.0"]);
+            if([systemVersion isEqualToString:@"8.0"]) {
+                NSString *html = [NSString stringWithContentsOfFile:fileURL.path encoding:NSUTF8StringEncoding error:nil];
+                // NSLog(@"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&, %@", html);
+                NSURL *baseURL = [RCTConvert NSURL:allowingReadAccessToURL];
+                [_webView loadHTMLString:html baseURL:baseURL];
+                return;
+            } else {
+                NSURL *fileTmpURL = [self fileURLForBuggyWKWebView8:fileURL];
+                NSURLRequest *request = [NSURLRequest requestWithURL:fileTmpURL];
+                [_webView loadRequest:request];
+                
+                return;
+            }
+            
+        }
+      
     }
     
     // Check for a static html source first
@@ -240,6 +302,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
       if (!baseURL) {
         baseURL = [NSURL URLWithString:@"about:blank"];
       }
+        
       [_webView loadHTMLString:html baseURL:baseURL];
       return;
     }
