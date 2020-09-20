@@ -11,6 +11,7 @@
 #import <React/RCTUtils.h>
 #import <React/RCTView.h>
 #import <React/UIView+React.h>
+#import "HybridNSURLProtocol.h"
 
 #import <objc/runtime.h>
 
@@ -55,7 +56,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   if(self = [self initWithFrame:CGRectZero])
   {
     super.backgroundColor = [UIColor clearColor];
+    // Override point for customization after application launch.
+    [NSURLProtocol registerClass:[HybridNSURLProtocol class]];
     
+    [NSURLProtocol wk_registerScheme:@"http"];
+    [NSURLProtocol wk_registerScheme:@"https"];
+    NSLog(@"zzzzzz initWithProcessPool:::");
     _automaticallyAdjustContentInsets = YES;
     _contentInset = UIEdgeInsetsZero;
     

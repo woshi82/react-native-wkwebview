@@ -13,7 +13,9 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.platform     = :ios, "8.0"
 
-  s.source       = { :git => "https://github.com/CRAlpha/react-native-wkwebview.git", :tag => "#{s.version}" }
+  # s.source       = { :http => 'file:' + __dir__  }
+  s.source       = { :git => "https://github.com/woshi82/react-native-wkwebview.git", :branch => "dev" }
+  # s.source       = { :git => "https://github.com/woshi82/react-native-wkwebview.git", :tag => "v#{s.version}" }
 
   s.source_files  = "ios/RCTWKWebView/*.{h,m}"
 
